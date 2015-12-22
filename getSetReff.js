@@ -121,7 +121,7 @@ function parse() {
     return referrers.map(function(e) {
         var matches;
 
-        if (matches = e.match(/^c:\[(.+)\]m:\[(.+)\]s:\[(.+)\]t:\[(.+)\]n:\[(.+)\]&([0-9.]+)$/)) {
+        if (matches = e.match(/^campaign::c:\[(.+)\]m:\[(.+)\]s:\[(.+)\]t:\[(.+)\]n:\[(.+)\]&([0-9.]+)$/)) {
             // campaign
             return {
                 type: "utm",
