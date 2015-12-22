@@ -1,0 +1,7 @@
+{ "name": "get-set-reff"
+, "version": "0.1.0"
+, "author": "innertrends"
+, "contributors": [ "Andras Sevcsik <sevcsik@sevdev.hu>" ]
+, "license": "GPLv3"
+, "main": "getSetReff.js"
+}

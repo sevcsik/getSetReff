@@ -1,3 +1,5 @@
+(function() {
+
 function getSetReff()
 {
 
@@ -109,3 +111,17 @@ function getSetReff()
     }
     return rC("__reff");
 }
+
+function definition() {
+    return getSetReff;
+}
+
+if (typeof module !== undefined) {
+    module.exports = definition();
+} else if (typeof define == 'function' && typeof define.amd == 'object') {
+    define(definition);
+} else {
+    window.getSetReff = definition();
+}
+
+})();
