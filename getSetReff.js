@@ -55,12 +55,14 @@ function getSetReff()
     var __cmp = "utm_campaign";
     var __mdm = "utm_medium";
     var __srcs = "utm_source";
+	var __trm = "utm_term";
+	var __cnt = "utm_content";
 
 
     //referrer or params?
     if (document.location.search.indexOf(__cmp) != -1 || document.location.search.indexOf(__mdm) != -1 || document.location.search.indexOf(__srcs) != -1)
     {
-        __gsr = "//campaign::c:["+gcP(__cmp)+"]m:["+gcP(__mdm)+"]s:["+gcP(__srcs)+"]";
+        __gsr = "//campaign::c:["+gcP(__cmp)+"]m:["+gcP(__mdm)+"]s:["+gcP(__srcs)+"]t:["+gcP(__trm)+"]n:["+gcP(__cnt)+"]";
     }
     else { __gsr = document.referrer; }
     //console.log(__gsr);
