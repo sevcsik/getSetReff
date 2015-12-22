@@ -1,5 +1,9 @@
 (function() {
 
+function rC(k){return(document.cookie.match('(^|; )'+k+'=([^;]*)')||0)[2]}
+function sC(n,v,d) { dd = new Date(); dd.setTime(dd.getTime() + (d*24*60*60*1000)) ;e = typeof d != "undefined" ? ";expires="+dd.toGMTString() : ""; document.cookie = n+"="+v+e+";domain="+_reff[0].setDomain+";path=/"; }
+function gcP(p) { if (document.location.search.indexOf(p) != -1) { return (""+document.location.search.split(p+"=")[1]).split("&")[0]; } else { return "not-set"; }  }
+
 function getSetReff()
 {
 
@@ -42,10 +46,6 @@ function getSetReff()
     var _reff=[];
     _reff = dataLayer.filter(function (value) {if (value.setDomain)  return value; });
     if (_reff.length === 0) _reff[0]={'setDomain':document.location.hostname};
-    
-    function rC(k){return(document.cookie.match('(^|; )'+k+'=([^;]*)')||0)[2]}
-    function sC(n,v,d) { dd = new Date(); dd.setTime(dd.getTime() + (d*24*60*60*1000)) ;e = typeof d != "undefined" ? ";expires="+dd.toGMTString() : ""; document.cookie = n+"="+v+e+";domain="+_reff[0].setDomain+";path=/"; }
-    function gcP(p) { if (document.location.search.indexOf(p) != -1) { return (""+document.location.search.split(p+"=")[1]).split("&")[0]; } else { return "not-set"; }  }
     
     //every pageview
     var __asc = (typeof rC("__sreff") != "undefined" ? rC("__sreff") : "");
@@ -114,8 +114,35 @@ function getSetReff()
     return rC("__reff");
 }
 
+function parse() {
+    var referrers = rC("__reff").split("|");
+
+    return referrers.map(function(e) {
+        var matches;
+
+        if (matches = e.match(/^c:\[(.+)\]m:\[(.+)\]s:\[(.+)\]t:\[(.+)\]n:\[(.+)\]&([0-9.]+)$/)) {
+            // campaign
+            return {
+                type: "utm",
+                campaign: matches[1],
+                medium: matches[2],
+                source: matches[3],
+                term: matches[4],
+                content: matches[5]
+            };
+        } else {
+            // catch-all for now
+            return e;
+        }               
+    });
+}
+
+
 function definition() {
-    return getSetReff;
+    return {
+        getSetReff: getSetReff,
+        parse: parse
+    };
 }
 
 if (typeof module !== undefined) {
