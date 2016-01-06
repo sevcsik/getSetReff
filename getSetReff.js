@@ -67,14 +67,43 @@ function getSetReff()
     {
         __gsr = "//campaign::c:["+gcP(__cmp)+"]m:["+gcP(__mdm)+"]s:["+gcP(__srcs)+"]t:["+gcP(__trm)+"]n:["+gcP(__cnt)+"]";
 		isUTM = true;
-    }
-    else { __gsr = document.referrer; }
+    } else { 
+		__gsr = document.referrer; 
+	}
+
     //console.log(__gsr);
     //get referrer domain & verify adwords
     if (document.location.search.indexOf("gclid") != -1 && !isUTM) {
 	   __gsr = "//campaign::[adwords]";
 	   isAdWords = true;
 	}
+
+	if (!isUTM && !isAdWords && document.referrer) { // organic, parse referrer to determine source
+		// regex is from gilly3@so (http://stackoverflow.com/a/8498629/382610)
+		var refHost = document.referrer.match(/^https?\:\/\/(www\d?\.)?([^\/?#]+)(?:[\/?#]|$)/i)[2];
+		var headSearch = "//org-sc::";
+		var headSocial = "//org-so::";
+
+		if (refHost.match(/^google\./)) { // check regex as google have different TLDs per location
+			__gsr = headSearch + "[gl]";
+		} else { // switch for exact domains
+			switch(refHost) {
+				case "facebook.com":
+					__gsr = headSocial + "[fb]";
+					break;
+				case "twitter.com":
+					__gsr = headSocial + "[tw]";
+					break;
+				case "bing.com":
+					__gsr = headSearch + "[bn]";
+					break;
+				case "linkedin.com":
+					__gsr = headSocial + "[li]";
+					break;
+			}
+		}
+	}
+
     __gsr = ((typeof __gsr == "undefined" || __gsr == "" || __gsr.indexOf(_reff[0].setDomain)!=-1) ? "(direct)" : __gsr.split('/')[2]);
 
     if (__asc)
@@ -137,7 +166,13 @@ function parse() {
                 term: matches[4],
                 content: matches[5]
             };
-        } else {
+        } else if (matches = e.match(/^org-(\w+)::\[(w+)\]&([0-9,]+)$/)) {
+			return {
+				type: "organic",
+				subtype: matches[1] === "sc" ? "search" : "social",
+				service: matches[2]
+			};
+		} else {
             // catch-all for now
             return e;
         }
