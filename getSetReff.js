@@ -85,7 +85,7 @@ function getSetReff()
 		var headSocial = "//org-so::";
 
 		if (refHost.match(/^google\./)) { // check regex as google have different TLDs per location
-			__gsr = headSearch + "[gl]";
+			__gsr = headSearch + "[gg]";
 		} else { // switch for exact domains
 			switch(refHost) {
 				case "facebook.com":
