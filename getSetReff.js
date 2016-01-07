@@ -166,7 +166,7 @@ function parse() {
                 term: matches[4],
                 content: matches[5]
             };
-        } else if (matches = e.match(/^org-(\w+)::\[(w+)\]&([0-9,]+)$/)) {
+        } else if (matches = e.match(/^org-(\w+)::\[(\w+)\]&([0-9.]+)$/)) {
 			return {
 				type: "organic",
 				subtype: matches[1] === "sc" ? "search" : "social",
